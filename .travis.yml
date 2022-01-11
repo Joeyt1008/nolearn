@@ -6,7 +6,6 @@ branches:
 python:
   - "3.8"
 arch:
-  - amd64
   - arm64
 addons:
   apt:
@@ -16,6 +15,13 @@ addons:
     - gfortran
     - graphviz
 before_install:
+  - wget -q "https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh" -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -u -b -p $HOME/miniconda3
+  - export PATH=$HOME/miniconda3/bin:$PATH
+  - ~/miniconda3/bin/conda install conda-build -y
+  - ~/miniconda3/bin/conda create -q -y --name testenv python=3.8 cython numpy pytest psutil pip
+  - source ~/miniconda3/bin/activate testenv
   - pip install -U pip setuptools wheel
 install:
   - pip install -r requirements.txt
